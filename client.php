@@ -31,10 +31,12 @@ if(isset($_SESSION["username"])) {
 </head>
 <body>
   <div class="client-dashboard">
-    <?php 
+    <?php
       echo '<h1 class="client-title">Welcome, ' . htmlspecialchars($username) . '!</  h1>';
     ?>
-
+    <div>
+      <button>Logout</button>
+    </div>
     <h2 style="text-align:center; color:#2d3a4b; margin-bottom:18px;">Our Instructors</h2>
     <div class="instructors-grid">
     <?php
@@ -98,7 +100,7 @@ if(isset($_SESSION["username"])) {
         <button class="book-btn">Book Session</button>
         <button class="review-btn" onclick="toggleReviewForm('.$random_number.')">Leave Review</button>
         <form method="POST" action="submit_review.php" class="review-form" id="review-form-'.$random_number.'">
-        <input type="hidden" name="instructor_id" value="'. htmlspecialchars($instructor['instructor_id']).'">
+        <input type="hidden" name="instructor_id" value="'.htmlspecialchars($instructor['instructor_id']).'">
           <textarea name="comment" placeholder="Write your review..."></textarea>
           <button type="submit">Submit</button>
         </form>
@@ -107,23 +109,32 @@ if(isset($_SESSION["username"])) {
         ';
         
       } else {
+        $reviewCount = 0;
         foreach($reviews as $review){
+          if(!empty($review['review_id'])){
           echo '
-          <div class="review">
-          <span class="review-client">- '.htmlspecialchars($review['reviewer_first_name']).'</span>
-          "'. htmlspecialchars($review['comment']).'"
-          </div>
+            <div class="review">
+            <span class="review-client">- '.htmlspecialchars($review['reviewer_first_name']).'</span>
+            "'. htmlspecialchars($review['comment']).'"
+            </div>
           ';
+          $reviewCount++;
+          if($reviewCount >= 2) break;
+          }
+          
         }
 
         echo '
-        <button class="book-btn">Book Session</button>
-        <button class="review-btn" onclick="toggleReviewForm('.$random_number.')">Leave Review</button>
-        <form method="POST" action="submit_review.php" class="review-form" id="review-form- '.htmlspecialchars($random_number).'">
-        <input type="hidden" name="instructor_id" value="'. htmlspecialchars($instructor['instructor_id']).'">
-        <textarea name="comment" placeholder="Write your review..." required></textarea>
-        <button type="submit">Submit</button>
+        <form method="POST" action="booking.php">
+          <button type="submit" class="book-btn">Book Session</button>
+
         </form>
+        <button class="review-btn" onclick="toggleReviewForm('.$random_number.')">Leave Review</button>
+          <form method="POST" action="submit_review.php" class="review-form" id="review-form-'.htmlspecialchars($random_number).'">
+            <input type="hidden" name="instructor_id" value="'. htmlspecialchars($instructor['instructor_id']).'">
+            <textarea name="comment" placeholder="Write your review..." required></textarea>
+            <button type="submit">Submit</button>
+          </form>
 
         </div>
         ';
@@ -133,7 +144,7 @@ if(isset($_SESSION["username"])) {
     ?>
     
       
-      <div class="instructor-card">
+      <!-- <div class="instructor-card">
         <img class="instructor-photo" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor John">
         <div class="instructor-name">John Carter</div>
         <div class="instructor-specialty">Strength & Conditioning</div>
@@ -152,7 +163,7 @@ if(isset($_SESSION["username"])) {
           <textarea placeholder="Write your review..."></textarea>
           <button type="submit">Submit</button>
         </form>
-      </div>
+      </div> -->
       
       <!-- Instructor 2 -->
       

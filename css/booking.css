@@ -1,0 +1,46 @@
+.booking-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 40px 30px;
+        }
+        .booking-title {
+            text-align: center;
+            color: #2d3a4b;
+            margin-bottom: 32px;
+        }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #e5e7eb;
+            padding: 12px 10px;
+            text-align: center;
+        }
+        .schedule-table th {
+            background: #f4f6fb;
+            color: #2d3a4b;
+        }
+        .book-btn {
+            padding: 8px 18px;
+            background: #4f8cff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .book-btn:hover {
+            background: #2563eb;
+        }
+        .message {
+            text-align: center;
+            color: green;
+            margin-bottom: 18px;
+        }

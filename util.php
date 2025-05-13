@@ -16,5 +16,13 @@ function generateNewUserIdReview($conn) {
   return 'r' . ($last_review_id + 1);
 }
 
+function generateNewBookingId($conn) {
+  $sql = "SELECT MAX(CAST(SUBSTRING(booking_id, 2) AS UNSIGNED)) AS last_book_id FROM bookings";
+  $result = $conn->query($sql);
+  $row = $result->fetch_assoc();
+  $last_book_id = $row['last_book_id'] ?? 0;
+  return 'b' . ($last_book_id + 1);
+}
+
 
 ?>

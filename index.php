@@ -76,7 +76,7 @@
             
             // Output the instructor's card with reviews
             echo '<div class="instructor-card">
-                    <img class="instructor-photo" src="' . htmlspecialchars($instructor['photo']) . '" alt="Instructor Photo">
+                    <img class="instructor-photo" src="uploads/'. htmlspecialchars($instructor['photo']) . '" alt="Instructor Photo">
                     <div class="instructor-name">' . htmlspecialchars($instructor_name) . '</div>
                     <div class="instructor-specialty">' . htmlspecialchars($instructor['bio']) . '</div>
                     <div class="reviews-title">Client Reviews</div>';
@@ -85,12 +85,18 @@
             if(count($reviews) === 0) {
               echo "Nothing to See.";
             } else {
+              $reviewCount = 0;
               foreach($reviews as $review){
-                echo '
+                if(!empty($review['review_id'])){
+                  echo '
                     <div class="review">
                         <span class="review-client">- ' . htmlspecialchars($review['reviewer_first_name']) . '</span>
                         ' . htmlspecialchars($review['comment']) . '
                     </div>';
+                    $reviewCount++;
+                    if($reviewCount >= 3) break;
+                }
+                
               }
             echo '</div>';  // Close the instructor card
             }
