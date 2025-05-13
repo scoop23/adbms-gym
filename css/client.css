@@ -1,0 +1,108 @@
+.client-dashboard {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 40px 30px;
+    }
+    .client-title {
+      text-align: center;
+      color: #2d3a4b;
+      margin-bottom: 32px;
+    }
+    .instructors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+      margin-top: 30px;
+    }
+    .instructor-card {
+      background: #f9fafb;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .instructor-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 16px;
+      border: 3px solid #4f8cff;
+    }
+    .instructor-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #2d3a4b;
+      margin-bottom: 6px;
+    }
+    .instructor-specialty {
+      font-size: 15px;
+      color: #4f8cff;
+      margin-bottom: 14px;
+    }
+    .reviews-title {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #2563eb;
+      margin-top: 10px;
+    }
+    .review {
+      background: #fff;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #444;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      width: 100%;
+    }
+    .review-client {
+      font-weight: 500;
+      color: #4f8cff;
+      font-size: 13px;
+      margin-bottom: 2px;
+      display: block;
+    }
+    .book-btn, .review-btn {
+      margin: 6px 4px 0 4px;
+      padding: 8px 18px;
+      background: #4f8cff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .book-btn:hover, .review-btn:hover {
+      background: #2563eb;
+    }
+    .review-form {
+      margin-top: 10px;
+      width: 100%;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .review-form textarea {
+      width: 100%;
+      min-height: 50px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      padding: 8px;
+      font-size: 14px;
+      resize: vertical;
+    }
+    .review-form button {
+      width: 100px;
+      align-self: flex-end;
+      padding: 7px 0;
+      font-size: 15px;
+    }
