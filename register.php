@@ -1,37 +1,7 @@
 <?php
 session_start();
 include "db.php";
-
-function insertUser($conn, $new_user_id, $firstname, $lastname, $email, $username, $password, $phone, $role) {
-  $sql = "SELECT MAX(CAST(SUBSTRING(user_id, 2) AS UNSIGNED)) AS last_user_id FROM users";
-  $result = $conn->query($sql);
-
-  if($result->num_rows > 0){
-  $row = $result->fetch_assoc();
-  $last_user_id = $row['last_user_id'] ? $row['last_user_id'] : 0;
-  $new_user_id = 'u' . ($last_user_id + 1);
-  } else {
-    $new_user_id = "u1";
-  }
-
-  $statement = "INSERT INTO users (user_id, first_name, last_name, email, username, password, phone, role) VALUES (?,?,?,?,?,?,?,?)";
-  $stmt = $conn->prepare($statement);
-  $stmt->bind_param("ssssssss", $new_user_id, $firstname, $lastname, $email, $username, $password, $phone, $role);
-
-  if($stmt->execute()){
-    echo "New user created successfully with user_id: $new_user_id";
-    session_write_close(); // Save
-    header("Location: client.php");
-    exit;
-  } else {
-    echo "Error: " . $stmt->error;
-  }
-
-  $conn->close();
-}
-
-
-
+include "util.php";
 
 if($_SERVER['REQUEST_METHOD'] === "POST"){
   $firstname = $_POST['first_name'];
@@ -41,13 +11,12 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
   $phone = $_POST['phone'];
   $password = password_hash($_POST["confirm_password"], PASSWORD_DEFAULT);
   $role = $_POST["role"];
-  
+  $new_user_id = generateNewUserId($conn);
   // Set session
-  $_SESSION['username'] = $username;
-  var_dump($_SESSION);
+
 
   insertUser($conn, $new_user_id, $firstname, $lastname, $email, $username, $password, $phone, $role);
-  
+  $conn->close();
 }
 ?>
 
@@ -85,12 +54,13 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
 
       <select class="dropdown" name="role" id="role">
         <option value="client">Client</option>
-        <option value="instructor">Instructor</option>
       </select>
 
       <button type="submit">Register</button>
+      
     </form>
     <div class="links">
+      </button><a href="index.php">Back to Home</a>
       <a href="login.php">Already have an account? Login</a>
     </div>
   </div>

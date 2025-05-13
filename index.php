@@ -48,7 +48,10 @@
       JOIN users instructor_user ON i.instructor_id = instructor_user.user_id
 
       -- Join to get reviewer info
-      JOIN users reviewer ON r.user_id = reviewer.user_id";
+      JOIN users reviewer ON r.user_id = reviewer.user_id
+      LIMIT 8
+      "
+      ;
 
 
 // Prepare and execute the query
@@ -67,6 +70,7 @@
     if(count($instructors) > 0){
         // Loop through each instructor
         foreach($instructors as $instructor_name => $reviews){
+            
             // Get the first review for the instructor (to get their photo and bio)
             $instructor = $reviews[0];
             
@@ -78,14 +82,18 @@
                     <div class="reviews-title">Client Reviews</div>';
 
             // Output each review for this instructor
-            foreach($reviews as $review){
+            if(count($reviews) === 0) {
+              echo "Nothing to See.";
+            } else {
+              foreach($reviews as $review){
                 echo '
                     <div class="review">
                         <span class="review-client">- ' . htmlspecialchars($review['reviewer_first_name']) . '</span>
                         ' . htmlspecialchars($review['comment']) . '
                     </div>';
-            }
+              }
             echo '</div>';  // Close the instructor card
+            }
         }
     } else {
         echo 'No reviews found.';

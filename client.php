@@ -14,13 +14,13 @@ if(isset($_SESSION["username"])) {
 <html>
 <head>
   <title>Client Dashboard | Gym Portal</title>
-  <link href="./css/client.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/client.css?v=<?php echo time(); ?>">
   <style>
     
   </style>
   <script>
     function toggleReviewForm(id) {
-      var form = document.getElementById('review-form-' + id);
+      let form = document.getElementById('review-form-' + id);
       if (form.style.display === 'flex') {
         form.style.display = 'none';
       } else {
@@ -34,10 +34,105 @@ if(isset($_SESSION["username"])) {
     <?php 
       echo '<h1 class="client-title">Welcome, ' . htmlspecialchars($username) . '!</  h1>';
     ?>
-    
+
     <h2 style="text-align:center; color:#2d3a4b; margin-bottom:18px;">Our Instructors</h2>
     <div class="instructors-grid">
-      <!-- Instructor 1 -->
+    <?php
+    include "db.php";
+    $sql = "SELECT 
+      r.review_id,
+      r.rating,
+      r.comment,
+
+      -- Reviewer's name
+      reviewer.first_name AS reviewer_first_name,
+      reviewer.last_name AS reviewer_last_name,
+
+      -- Instructor's name
+      instructor_user.first_name AS instructor_first_name,
+      instructor_user.last_name AS instructor_last_name,
+
+      i.bio,
+      i.photo,
+      i.specialties,
+      i.instructor_id
+
+      FROM instructors i
+
+      -- Join to get instructor info
+      LEFT JOIN reviews r ON r.instructor_id = i.instructor_id
+      LEFT JOIN users instructor_user ON i.instructor_id = instructor_user.user_id
+
+      -- Join to get reviewer info
+      LEFT JOIN users reviewer ON r.user_id = reviewer.user_id
+      LIMIT 8
+      "
+      ;
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $results = $stmt->get_result();
+    
+    $instructors = [];
+
+    while($row = $results->fetch_assoc()) {
+      $instructors[$row['instructor_first_name'] . ' ' . $row['instructor_last_name']][] = $row;
+    }
+    
+    foreach($instructors as $instructor_name => $reviews) {
+      $instructor = $reviews[0];
+      $random_number = rand();
+      echo '
+        <div class="instructor-card">
+          <img class="instructor-photo" src="uploads/'.htmlspecialchars($instructor['photo']).'" alt="Instructor '.  htmlspecialchars($instructor['instructor_first_name']) .'">
+          <div class="instructor-name">'. htmlspecialchars($instructor_name) .'</div>
+          <div class="instructor-specialty">'. htmlspecialchars($instructor['specialties']) .'</div>
+          <div class="reviews-title">Client Reviews</div>
+        ';
+      
+      if(empty($reviews[0]['review_id'])) {
+        echo '
+        <div class="no-review">
+          No Reviews Yet.
+         </div>
+        <button class="book-btn">Book Session</button>
+        <button class="review-btn" onclick="toggleReviewForm('.$random_number.')">Leave Review</button>
+        <form method="POST" action="submit_review.php" class="review-form" id="review-form-'.$random_number.'">
+        <input type="hidden" name="instructor_id" value="'. htmlspecialchars($instructor['instructor_id']).'">
+          <textarea name="comment" placeholder="Write your review..."></textarea>
+          <button type="submit">Submit</button>
+        </form>
+        </div>
+        
+        ';
+        
+      } else {
+        foreach($reviews as $review){
+          echo '
+          <div class="review">
+          <span class="review-client">- '.htmlspecialchars($review['reviewer_first_name']).'</span>
+          "'. htmlspecialchars($review['comment']).'"
+          </div>
+          ';
+        }
+
+        echo '
+        <button class="book-btn">Book Session</button>
+        <button class="review-btn" onclick="toggleReviewForm('.$random_number.')">Leave Review</button>
+        <form method="POST" action="submit_review.php" class="review-form" id="review-form- '.htmlspecialchars($random_number).'">
+        <input type="hidden" name="instructor_id" value="'. htmlspecialchars($instructor['instructor_id']).'">
+        <textarea name="comment" placeholder="Write your review..." required></textarea>
+        <button type="submit">Submit</button>
+        </form>
+
+        </div>
+        ';
+      }
+        
+    }
+    ?>
+    
+      
       <div class="instructor-card">
         <img class="instructor-photo" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor John">
         <div class="instructor-name">John Carter</div>
@@ -58,69 +153,13 @@ if(isset($_SESSION["username"])) {
           <button type="submit">Submit</button>
         </form>
       </div>
+      
       <!-- Instructor 2 -->
-      <div class="instructor-card">
-        <img class="instructor-photo" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Instructor Lisa">
-        <div class="instructor-name">Lisa Smith</div>
-        <div class="instructor-specialty">Yoga & Flexibility</div>
-        <div class="reviews-title">Client Reviews</div>
-        <div class="review">
-          <span class="review-client">- Emma</span>
-          "Lisa's yoga classes helped me improve my flexibility a lot!"
-        </div>
-        <div class="review">
-          <span class="review-client">- Alex</span>
-          "Very calming and professional approach."
-        </div>
-        <button class="book-btn">Book Session</button>
-        <button class="review-btn" onclick="toggleReviewForm(2)">Leave Review</button>
-        <form class="review-form" id="review-form-2">
-          <textarea placeholder="Write your review..."></textarea>
-          <button type="submit">Submit</button>
-        </form>
-      </div>
+      
       <!-- Instructor 3 -->
-      <div class="instructor-card">
-        <img class="instructor-photo" src="https://randomuser.me/api/portraits/men/65.jpg" alt="Instructor Mark">
-        <div class="instructor-name">Mark Lee</div>
-        <div class="instructor-specialty">Cardio & HIIT</div>
-        <div class="reviews-title">Client Reviews</div>
-        <div class="review">
-          <span class="review-client">- Olivia</span>
-          "Mark's HIIT sessions are challenging but fun!"
-        </div>
-        <div class="review">
-          <span class="review-client">- Daniel</span>
-          "Great energy and always pushes you to do your best."
-        </div>
-        <button class="book-btn">Book Session</button>
-        <button class="review-btn" onclick="toggleReviewForm(3)">Leave Review</button>
-        <form class="review-form" id="review-form-3">
-          <textarea placeholder="Write your review..."></textarea>
-          <button type="submit">Submit</button>
-        </form>
-      </div>
+      
       <!-- Instructor 4 -->
-      <div class="instructor-card">
-        <img class="instructor-photo" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Instructor Anna">
-        <div class="instructor-name">Anna Brown</div>
-        <div class="instructor-specialty">Personal Training</div>
-        <div class="reviews-title">Client Reviews</div>
-        <div class="review">
-          <span class="review-client">- Chris</span>
-          "Anna created a personalized plan that really works for me."
-        </div>
-        <div class="review">
-          <span class="review-client">- Mia</span>
-          "Very supportive and attentive to my goals."
-        </div>
-        <button class="book-btn">Book Session</button>
-        <button class="review-btn" onclick="toggleReviewForm(4)">Leave Review</button>
-        <form class="review-form" id="review-form-4">
-          <textarea placeholder="Write your review..."></textarea>
-          <button type="submit">Submit</button>
-        </form>
-      </div>
+      
     </div>
   </div>
 </body>

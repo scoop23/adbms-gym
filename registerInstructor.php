@@ -1,4 +1,64 @@
+<?php 
+include "db.php";
+include "util.php";
 
+function insertInstructor($conn, $new_user_id, $bio, $photo, $rating, $certifications, $specialties){
+  $statement = "INSERT INTO instructors (instructor_id, bio, photo, rating, certifications, specialties) VALUES (?,?,?,?,?,?)";
+  $stmt = $conn->prepare($statement);
+  $stmt->bind_param("ssssss", $new_user_id, $bio, $photo, $rating, $certifications, $specialties);
+
+
+  if (!$stmt->execute()) {
+    die("Insert instructor failed: " . $stmt->error);
+  }
+  echo "Instructor inserted successfully!";
+
+}
+
+$uploadDir = 'uploads/'; 
+
+if($_SERVER['REQUEST_METHOD'] === "POST"){
+  $firstname = $_POST['firstname'];
+  $lastname = $_POST['lastname'];
+  $username = $_POST['username'];
+  $email = $_POST['email'];
+  $phone = $_POST['phone'];
+  $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+  $role = $_POST["role"];
+  $bio = $_POST["bio"];
+  // $photo = $_POST["photo"];
+  $rating = (int)$_POST['rating'];
+  $certifications = $_POST["certifications"];
+  $specialties = $_POST["specialties"];
+
+  $new_user_id = generateNewUserId($conn);
+  $photoFilename = null;
+
+  if(isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK){
+    $tmp_name = $_FILES['photo']['tmp_name'];
+    $originalName = basename($_FILES['photo']['name']);
+    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+    $photoFilename = uniqid('photo_', true) . '.' . $extension;
+    $destination = $uploadDir . $photoFilename;
+
+    if(!move_uploaded_file($tmp_name, $destination)){
+      die("failed to upload photo.");
+    }
+  }
+
+
+
+  insertUser($conn, $new_user_id, $firstname, $lastname, $email, $username, $password, $phone, $role);
+
+  if($role === 'instructor') {
+    echo "Role is instructor<br>";
+    insertInstructor($conn,$new_user_id, $bio, $photoFilename, $rating, $certifications, $specialties);
+  }
+  $conn->close();
+  
+
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,6 +108,7 @@
     </form>
     <div class="links">
       <a href="login.php">Already have an account? Login</a>
+      <a href="index.php">Back to home</a>
     </div>
   </div>
 </body>
