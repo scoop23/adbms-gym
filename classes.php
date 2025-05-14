@@ -21,16 +21,16 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
 
   $stmt = $conn->prepare("INSERT INTO classes (class_id, `name`, `description`, difficulty_level, duration, capacity) VALUES (?, ?, ?, ?, ? ,?)");
-  $stmt->bind_param($class_id , $name, $description, $difficulty_level, $duration, $capacity);
+  $stmt->bind_param("ssssii",$class_id , $name, $description, $difficulty_level, $duration, $capacity);
 
   if($stmt->execute()){
     $schedule_id = generateNewScheduleId($conn);
-    $start_time = $_POST('start_time');
-    $end_time = $_POST('end_time');
-    $location = $_POST('location');
+    $start_time = $_POST['start_time'];
+    $end_time = $_POST['end_time'];
+    $location = $_POST['location'];
 
     $stmt2 = $conn->prepare("INSERT INTO schedules (schedule_id, start_time, end_time , `location`) VALUES (?, ?, ?, ?)");
-    $stmt2->bind_param($schedule_id, $start_time, $end_time, $location);
+    $stmt2->bind_param("ssss" ,$schedule_id, $start_time, $end_time, $location);
     if($stmt2->execute()){
       $message = "Class and Schedule Added Successfully.";
     } else {

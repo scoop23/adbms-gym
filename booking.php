@@ -11,6 +11,10 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
+if(isset($_GET['instructor_id'])){
+    $instructor_id = $_GET['instructor_id'];
+}
+
 // Handle booking form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_id'])) {
     $schedule_id = $_POST['schedule_id'];
@@ -27,6 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['schedule_id'])) {
     }
 }
 
+$instructor_sql = "SELECT u.first_name , u.last_name
+                   FROM instructors AS i
+                   JOIN users AS u
+                   ON u.user_id = i.instructor_id
+                   WHERE i.instructor_id = ?";
+$instructor_stmt = $conn->prepare($instructor_sql);
+$instructor_stmt->bind_param("s" , $instructor_id);
+$instructor_stmt->execute();
+$instructor_result = $instructor_stmt->get_result();
+$instructor = $instructor_result->fetch_assoc();
+
+
 // Fetch available schedules with class and instructor info
 $sql = "SELECT 
             s.schedule_id, s.start_time, s.end_time, s.location,
@@ -36,9 +52,18 @@ $sql = "SELECT
         JOIN classes c ON s.class_id = c.class_id
         JOIN instructors i ON s.instructor_id = i.instructor_id
         JOIN users u ON i.instructor_id = u.user_id
-        WHERE s.start_time > NOW()
+        WHERE s.start_time > NOW() AND i.instructor_id = ?  
         ORDER BY s.start_time ASC";
-$result = $conn->query($sql);
+        //                                   ^
+        //                                   |
+        // changed so that only the instructor that created the class will be seen by the user :D
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s",$instructor_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -48,8 +73,11 @@ $result = $conn->query($sql);
     
 </head>
 <body>
+
     <div class="booking-container">
         <h1 class="booking-title">Book a Gym Session</h1>
+        <h5><?php echo htmlspecialchars($instructor['first_name'] . ' ' . $instructor['last_name'])?></h5>
+     
         <?php if (!empty($message)): ?>
             <div class="message"><?php echo htmlspecialchars($message); ?></div>
         <?php endif; ?>

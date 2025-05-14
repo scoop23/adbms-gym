@@ -62,7 +62,11 @@ $reviews = $stmt_reviews->get_result();
       </div>
     </div>
 
-    <div class="section-title">Your Scheduled Classes</div>
+    <div class="section-title">Your Scheduled Classes
+      <form method="GET" action="classes.php">
+        <button type="submit">Create a Class</button>
+      </form>
+    </div>
     
     <table class="class-table">
       <tr>

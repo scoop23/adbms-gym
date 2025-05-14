@@ -106,7 +106,10 @@ if(isset($_SESSION["username"])) {
         <div class="no-review">
           No Reviews Yet.
          </div>
-        <button class="book-btn">Book Session</button>
+        <form method="GET" action="booking.php">
+         <input type="hidden" name="instructor_id" value="'. htmlspecialchars($instructor['instructor_id']).'">
+          <button type="submit" class="book-btn">Book Session</button>
+        </form>
         <button class="review-btn" onclick="toggleReviewForm('.$random_number.')">Leave Review</button>
         <form method="POST" action="submit_review.php" class="review-form" id="review-form-'.$random_number.'">
         <input type="hidden" name="instructor_id" value="'.htmlspecialchars($instructor['instructor_id']).'">
@@ -130,15 +133,16 @@ if(isset($_SESSION["username"])) {
           $reviewCount++;
           if($reviewCount >= 2) break;
           }
-          
         }
 
         echo '
-        <form method="POST" action="booking.php">
+        <form method="GET" action="booking.php">
+         <input type="hidden" name="instructor_id" value="'. htmlspecialchars($instructor['instructor_id']).'">
           <button type="submit" class="book-btn">Book Session</button>
-
         </form>
-        <button class="review-btn" onclick="toggleReviewForm('.$random_number.')">Leave Review</button>
+        ';
+
+        echo '<button class="review-btn" onclick="toggleReviewForm('.$random_number.')">Leave Review</button>
           <form method="POST" action="submit_review.php" class="review-form" id="review-form-'.htmlspecialchars($random_number).'">
             <input type="hidden" name="instructor_id" value="'. htmlspecialchars($instructor['instructor_id']).'">
             <textarea name="comment" placeholder="Write your review..." required></textarea>
