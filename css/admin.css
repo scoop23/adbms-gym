@@ -1,0 +1,38 @@
+.admin-container { 
+  max-width: 1200px; 
+  margin: 40px auto; 
+  background: #fff; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08); 
+  padding: 40px 30px;
+}
+.admin-title { 
+  text-align: center; 
+  color: #2d3a4b; 
+  margin-bottom: 32px;
+}
+.section-title { 
+  color: #2563eb; 
+  margin-top: 32px; 
+  margin-bottom: 10px; 
+  font-size: 18px; 
+  font-weight: 600;
+}
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  margin-bottom: 24px;
+}
+th, td { 
+  border: 1px solid #e5e7eb; 
+  padding: 10px 8px; 
+  text-align: center;
+}
+th { 
+  background: #f4f6fb; 
+  color: #2d3a4b;
+}
+.links { 
+  text-align: center; 
+  margin-top: 24px;
+}
