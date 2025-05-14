@@ -5,14 +5,20 @@ session_start();
 if(isset($_SESSION["username"])) {
     $username = $_SESSION["username"];
 } else {
-    // If the session variable is not set, assign a default value or handle the error
-    $username = 'Guest';  // Default or error message, can be handled differently if needed
+    header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
+    header("Pragma: no-cache"); // HTTP 1.0
+    header("Expires: 0"); // Proxies 
+    session_unset();
+    session_destroy();
+    header('Location: index.php');
+    exit();
 }
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
+  
   <title>Client Dashboard | Gym Portal</title>
   <link rel="stylesheet" href="./css/client.css?v=<?php echo time(); ?>">
   <style>
@@ -34,9 +40,12 @@ if(isset($_SESSION["username"])) {
     <?php
       echo '<h1 class="client-title">Welcome, ' . htmlspecialchars($username) . '!</  h1>';
     ?>
-    <div>
-      <button>Logout</button>
-    </div>
+
+    <form action="logout.php" method="POST">
+        <button type="submit">Logout</button>
+    </form>
+
+    
     <h2 style="text-align:center; color:#2d3a4b; margin-bottom:18px;">Our Instructors</h2>
     <div class="instructors-grid">
     <?php

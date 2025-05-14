@@ -1,0 +1,55 @@
+.dashboard-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 40px 30px;
+    }
+    .dashboard-title {
+      text-align: center;
+      color: #2d3a4b;
+      margin-bottom: 32px;
+    }
+    .profile-section {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .profile-photo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #4f8cff;
+      background: #e5e7eb;
+    }
+    .profile-info {
+      flex: 1;
+    }
+    .section-title {
+      color: #2563eb;
+      margin-top: 24px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .class-table, .review-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    .class-table th, .class-table td, .review-table th, .review-table td {
+      border: 1px solid #e5e7eb;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .class-table th, .review-table th {
+      background: #f4f6fb;
+      color: #2d3a4b;
+    }
+    .review-rating {
+      color: #f59e42;
+      font-weight: bold;
+    }

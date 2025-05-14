@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Gym Portal</title>
-  <link href="./css/styles.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css?v=<?php echo time(); ?>">
   <style>
     
     

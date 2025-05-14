@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
   $role = $_POST["role"];
   $bio = $_POST["bio"];
   // $photo = $_POST["photo"];
-  $rating = (int)$_POST['rating'];
+  $rating = 1;
   $certifications = $_POST["certifications"];
   $specialties = $_POST["specialties"];
 
@@ -92,9 +92,6 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
 
       <label for="photo">Photo</label>
       <input type="file" id="photo" name="photo" accept="image/*" required>
-
-      <label for="rating">Rating (1-5)</label>
-      <input type="number" id="rating" name="rating" min="1" max="5" required>
 
       <label for="certifications">Certifications</label>
       <input type="text" id="certifications" name="certifications" required>

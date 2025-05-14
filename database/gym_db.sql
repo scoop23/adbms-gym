@@ -25,7 +25,7 @@ CREATE TABLE instructors (
   ),
   certifications TEXT,
   specialties TEXT,
-  FOREIGN KEY (instructor_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (instructor_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 CREATE TABLE classes (
   class_id VARCHAR(50) PRIMARY KEY,
